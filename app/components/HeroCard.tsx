@@ -1,0 +1,49 @@
+/* eslint-disable @next/next/no-img-element */
+import { Article } from "@/app/types";
+
+interface HeroCardProps {
+  article: Article;
+  className?: string;
+}
+export function HeroCard({ article, className }: HeroCardProps) {
+  const categoryStyles: { [key: string]: string } = {
+    Anime: "bg-blue-600 hover:bg-blue-700",
+    "Content Creator": "bg-purple-600 hover:bg-purple-700",
+    Event: "bg-green-600 hover:bg-green-700",
+    Gaming: "bg-yellow-500 hover:bg-yellow-600 text-black",
+    Cosplay: "bg-pink-600 hover:bg-pink-700",
+    Japanese: "bg-red-600 hover:bg-red-700",
+    default: "bg-gray-600 hover:bg-gray-700",
+  };
+
+  return (
+    <div
+      className={`${className} relative md:rounded-2xl overflow-hidden group cursor-pointer h-64 md:h-auto shadow-lg`}
+    >
+      <img
+        src={article.imageUrl}
+        alt={article.title}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.onerror = null;
+          target.src = `https://placehold.co/600x400/1f2937/ffffff?text=Image+Not+Found`;
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+      <div className="absolute bottom-0 left-0 p-5 sm:p-6 text-white w-full flex flex-col items-start">
+        <span
+          className={`text-xs font-semibold uppercase px-3 py-1.5 rounded-full mb-3 transition-colors duration-300 ${
+            categoryStyles[article.category] || categoryStyles.default
+          }`}
+        >
+          {article.category}
+        </span>
+        <h3 className="text-lg sm:text-xl font-bold leading-tight drop-shadow-md text-balance">
+          {article.title}
+        </h3>
+      </div>
+    </div>
+  );
+}

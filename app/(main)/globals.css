@@ -18,50 +18,7 @@
 }
 
 @layer utilities {
-  .bg-primary {
-    background-color: hsl(var(--primary));
-  }
-  .bg-secondary {
-    background-color: hsl(var(--secondary));
-  }
-  .bg-tertiary {
-    background-color: hsl(var(--tertiary));
-  }
-
-  .hover\:bg-primary:hover {
-    background-color: hsl(var(--primary));
-  }
-  .hover\:bg-secondary:hover {
-    background-color: hsl(var(--secondary));
-  }
-  .hover\:bg-tertiary:hover {
-    background-color: hsl(var(--tertiary));
-  }
-
-  .text-primary {
-    color: hsl(var(--primary));
-  }
-  .text-secondary {
-    color: hsl(var(--secondary));
-  }
-  .text-tertiary {
-    color: hsl(var(--tertiary));
-  }
-
-  .border-primary {
-    border-color: hsl(var(--primary));
-  }
-  .border-secondary {
-    border-color: hsl(var(--secondary));
-  }
-
-  .focus\:ring-primary:focus {
-    --tw-ring-opacity: 1;
-    --tw-ring-color: hsl(var(--primary));
-  }
-}
-
-@layer utilities {
+  /* Background Colors */
   .bg-primary {
     background-color: var(--primary);
   }
@@ -72,6 +29,7 @@
     background-color: var(--tertiary);
   }
 
+  /* Hover Background Colors */
   .hover\:bg-primary:hover {
     background-color: var(--primary);
   }
@@ -82,6 +40,7 @@
     background-color: var(--tertiary);
   }
 
+  /* Text Colors */
   .text-primary {
     color: var(--primary);
   }
@@ -98,6 +57,18 @@
     color: var(--subtle-text);
   }
 
+  /* Hover Text Colors */
+  .hover\:text-primary:hover {
+    color: var(--primary);
+  }
+  .hover\:text-secondary:hover {
+    color: var(--secondary);
+  }
+  .hover\:text-tertiary:hover {
+    color: var(--tertiary);
+  }
+
+  /* Border Colors */
   .border-primary {
     border-color: var(--primary);
   }
@@ -108,6 +79,7 @@
     border-color: var(--border-color);
   }
 
+  /* Focus Ring Color */
   .focus\:ring-primary:focus {
     --tw-ring-opacity: 1;
     --tw-ring-color: var(--primary);

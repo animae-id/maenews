@@ -1,17 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { Article } from "../types"; // Pastikan path ini benar
-import { NewsCard } from "./NewsCard"; // Menggunakan NewsCard yang sudah diperbarui
+import { Article } from "../../types"; // Pastikan path ini benar
+import { NewsCard } from "../NewsCard"; // Menggunakan NewsCard yang sudah diperbarui
 import { Flame } from "lucide-react"; // Menggunakan ikon baru untuk judul
 
-interface NewsSliderProps {
+interface SliderNewsProps {
   articles: Article[];
   title: string;
 }
 
-export function NewsSlider({ articles, title }: NewsSliderProps) {
+export function SliderNews({ articles, title }: SliderNewsProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 

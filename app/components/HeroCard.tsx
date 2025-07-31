@@ -7,13 +7,13 @@ interface HeroCardProps {
 }
 export function HeroCard({ article, className }: HeroCardProps) {
   const categoryStyles: { [key: string]: string } = {
-    Anime: "bg-blue-600 hover:bg-blue-700",
-    "Content Creator": "bg-purple-600 hover:bg-purple-700",
-    Event: "bg-green-600 hover:bg-green-700",
-    Gaming: "bg-yellow-500 hover:bg-yellow-600 text-black",
-    Cosplay: "bg-pink-600 hover:bg-pink-700",
-    Japanese: "bg-red-600 hover:bg-red-700",
-    default: "bg-gray-600 hover:bg-gray-700",
+    Anime: "bg-secondary hover:bg-primary",
+    "Content Creator": "bg-secondary hover:bg-primary",
+    Event: "bg-secondary hover:bg-primary",
+    Gaming: "bg-secondary hover:bg-primary",
+    Cosplay: "bg-secondary hover:bg-primary",
+    Japanese: "bg-secondary hover:bg-primary",
+    default: "bg-secondary hover:bg-primary",
   };
 
   return (

@@ -33,7 +33,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Badge variant="secondary" className="mb-4 bg-secondary/10 text-secondary hover:bg-secondary/20">
+      <Badge variant="secondary" className="mb-4 bg-secondary text-white">
         {article.category}
       </Badge>
 
@@ -75,7 +75,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
             <Link key={tag} href={`/tag/${slugify(tag)}`}>
               <Badge 
                 variant="outline" 
-                className="cursor-pointer hover:bg-gray-100 transition-colors"
+                className="cursor-pointer bg-secondary text-white hover:text-secondary hover:bg-orange-100 transition-colors"
               >
                 {tag}
               </Badge>

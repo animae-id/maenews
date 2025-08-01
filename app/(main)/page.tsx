@@ -6,10 +6,10 @@ import { Hero } from "../components/Hero";
 import { Sidebar } from "../components/Sidebar";
 import { trendingItems, upcomingEvents, mockArticles } from "../data/mockData";
 import { EventBanner } from "../components/BannerEvent";
-import { LatestNewsSection } from "../components/LatestNewsSection";
-import { LatestNewsArticle } from "../components/LatestNewsArticle";
+import { LatestNewsSection } from "../components/article/LatestNewsSection";
 import { Loader2 } from "lucide-react";
 import { Article } from "../types";
+import { LatestNewsArticle } from "../components/article/LatestNewsArticle";
 
 const SliderNews = dynamic(
   () => import("../components/slider/SliderNews").then((mod) => mod.SliderNews),

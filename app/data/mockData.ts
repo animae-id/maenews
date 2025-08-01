@@ -266,3 +266,20 @@ export const upcomingEvents: Event[] = [
     imageUrl: "https://placehold.co/400x300/0284C7/FFFFFF?text=Anisong+Concert",
   },
 ];
+
+export function getArticleById(id: number | string): Article | undefined {
+  const allArticles = [featuredArticle, ...mockArticles];
+  return allArticles.find((article) => String(article.id) === String(id));
+}
+
+export function getArticlesByCategory(categoryName: string): Article[] {
+  return mockArticles.filter(
+    (article) => article.category.toLowerCase() === categoryName.toLowerCase()
+  );
+}
+
+export function getArticlesByTag(tagName: string): Article[] {
+  return mockArticles.filter((article) =>
+    article.tags.some((tag) => tag.toLowerCase() === tagName.toLowerCase())
+  );
+}

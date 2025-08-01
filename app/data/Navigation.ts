@@ -3,11 +3,12 @@ export interface NavItem {
   href: string;
 }
 
+// PERBAIKAN: href sekarang menunjuk ke path kategori yang dinamis
 export const navItems: NavItem[] = [
-  { label: "Anime", href: "#" },
-  { label: "Creator", href: "#" },
-  { label: "Event", href: "#" },
-  { label: "Gaming", href: "#" },
-  { label: "Cosplay", href: "#" },
-  { label: "Gallery", href: "#" },
+  { label: "Anime", href: "/category/anime" },
+  { label: "Creator", href: "/category/content-creator" },
+  { label: "Event", href: "/category/event" },
+  { label: "Gaming", href: "/category/gaming" },
+  { label: "Cosplay", href: "/category/cosplay" },
+  { label: "Gallery", href: "/gallery" }, // Gallery bisa menjadi halaman terpisah
 ];

@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Clock, User, Eye } from "lucide-react";
-import { Article } from "../types";
-import { formatRelativeTime } from "../utils/dateUtils";
+import { Clock, User } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { Article } from "@/app/types";
+import { formatRelativeTime } from "@/app/utils/dateUtils";
 
 interface LatestNewsArticleProps {
   article: Article;
@@ -27,7 +27,10 @@ export function LatestNewsArticle({ article }: LatestNewsArticleProps) {
         <div className="flex-shrink-0">
           <div className="w-34 h-24 md:h-34 sm:w-56 md:w-64">
             <Image
-              src={article.imageUrl || "https://placehold.co/400x300/e2e8f0/64748b?text=Img"}
+              src={
+                article.imageUrl ||
+                "https://placehold.co/400x300/e2e8f0/64748b?text=Img"
+              }
               alt={article.title}
               width={256}
               height={170}
@@ -61,7 +64,7 @@ export function LatestNewsArticle({ article }: LatestNewsArticleProps) {
               </div>
             </div>
           </div>
-          
+
           {/* Excerpt hanya tampil di desktop */}
           <p className="hidden sm:block text-gray-600 text-sm leading-relaxed line-clamp-2">
             {article.excerpt}

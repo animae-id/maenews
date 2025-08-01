@@ -1,16 +1,21 @@
-import { getArticleById } from "@/app/data/mockData";
+import { getArticleById, trendingItems, upcomingEvents } from "@/app/data/mockData";
 import { ArticleDetail } from "@/app/components/article/ArticleDetail";
 import { Sidebar } from "@/app/components/Sidebar";
-import { trendingItems, upcomingEvents } from "@/app/data/mockData";
 import { notFound } from "next/navigation";
 
-// PERBAIKAN: Menggunakan destructuring langsung pada argumen fungsi.
-// Ini adalah pola yang paling benar untuk Server Components di Next.js.
-export default async function ArticlePage({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
-  const article = getArticleById(slug);
+// ✅ Ini wajib agar route dianggap dynamic
+export const dynamic = "force-dynamic";
 
-  // Jika artikel tidak ditemukan, tampilkan halaman 404
+// ✅ Gunakan built-in type props
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function ArticlePage({ params }: PageProps) {
+  const article = getArticleById(params.slug);
+
   if (!article) {
     notFound();
   }
@@ -22,10 +27,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           <ArticleDetail article={article} />
         </div>
         <div className="lg:col-span-1">
-          <Sidebar
-            trendingItems={trendingItems}
-            upcomingEvents={upcomingEvents}
-          />
+          <Sidebar trendingItems={trendingItems} upcomingEvents={upcomingEvents} />
         </div>
       </div>
     </main>

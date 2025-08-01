@@ -5,7 +5,7 @@ import { Article } from "../types";
 import { mockArticles } from "../data/mockData";
 
 export function useArticles() {
-  const [articles, setArticles] = useState<Article[]>(mockArticles);
+  const [articles] = useState<Article[]>(mockArticles);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>(mockArticles);
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");

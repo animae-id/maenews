@@ -1,11 +1,11 @@
 import { getArticleById } from "@/app/data/mockData";
-import { ArticleDetail } from "@/app/components/article/ArticleDetail"; // Path impor disesuaikan
+import { ArticleDetail } from "@/app/components/article/ArticleDetail";
 import { Sidebar } from "@/app/components/Sidebar";
 import { trendingItems, upcomingEvents } from "@/app/data/mockData";
 import { notFound } from "next/navigation";
 
-// PERBAIKAN: Menggunakan pola destructuring yang paling umum dan stabil.
-// Kita menerima 'params' sebagai prop, lalu mengambil 'slug' dari dalamnya.
+// PERBAIKAN: Menggunakan destructuring langsung pada argumen fungsi.
+// Ini adalah pola yang paling benar untuk Server Components di Next.js.
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const { slug } = await params;
   const article = getArticleById(slug);

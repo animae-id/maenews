@@ -28,7 +28,8 @@ export function Sidebar({ trendingItems, upcomingEvents }: SidebarProps) {
         </div>
 
         <div className="space-y-4">
-          {trendingItems.map((item, index) => (
+          {/* PERBAIKAN: Menggunakan .slice(0, 5) untuk membatasi data */}
+          {trendingItems.slice(0, 5).map((item, index) => (
             <Link href="#" key={item.id} className="block group">
               <motion.div
                 className="flex gap-4 p-2 rounded-xl hover:bg-orange-50 transition-colors"
@@ -45,6 +46,7 @@ export function Sidebar({ trendingItems, upcomingEvents }: SidebarProps) {
                     alt={item.title}
                     width={64}
                     height={64}
+                    unoptimized
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -75,14 +77,13 @@ export function Sidebar({ trendingItems, upcomingEvents }: SidebarProps) {
         </div>
 
         <div className="space-y-4">
-          {upcomingEvents.map((event, index) => (
+          {upcomingEvents.slice(0, 5).map((event, index) => (
             <Link href="#" key={event.id} className="block group">
               <motion.div
                 className="flex gap-4 p-2 rounded-xl hover:bg-orange-50 transition-colors"
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                // PERBAIKAN: Animasi hover dikembalikan
                 whileHover={{ x: 5 }}
               >
                 <div className="w-16 h-16 rounded-xl flex-shrink-0 overflow-hidden">
@@ -94,6 +95,7 @@ export function Sidebar({ trendingItems, upcomingEvents }: SidebarProps) {
                     alt={event.title}
                     width={64}
                     height={64}
+                    unoptimized
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>

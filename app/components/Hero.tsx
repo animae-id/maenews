@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { motion, PanInfo } from "framer-motion";
-import { featuredArticle, mockArticles } from "@/app/data/mockData";
 import { HeroCard } from "./HeroCard";
 import { Article } from "@/app/types";
 
@@ -13,12 +12,21 @@ const gridLayoutClasses = [
   "md:col-span-1",
 ];
 
-export function Hero() {
+type HeroProps = {
+  featuredArticle?: Article;
+  articles: Article[];
+};
+
+export const Hero: React.FC<HeroProps> = ({ featuredArticle, articles }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Gunakan hanya artikel dari props
   const heroDisplayArticles: Article[] = useMemo(() => {
-    return [featuredArticle, ...mockArticles.slice(0, 3)];
-  }, []);
+    const slicedArticles = articles.slice(0, 3);
+    return [featuredArticle, ...slicedArticles].filter(
+      (article): article is Article => article !== undefined
+    );
+  }, [featuredArticle, articles]);
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     const swipeThreshold = 50;
@@ -33,7 +41,7 @@ export function Hero() {
 
   return (
     <section className="container mx-auto py-3 sm:py-6">
-      {/* 1. Tampilan Slider untuk Mobile */}
+      {/* Mobile Slider */}
       <div className="md:hidden">
         <div className="relative overflow-hidden">
           <motion.div
@@ -53,7 +61,7 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Indikator Titik (Dots) */}
+        {/* Dots Indicator */}
         <div className="flex justify-center gap-2 mt-6">
           {heroDisplayArticles.map((_, i) => (
             <button
@@ -70,7 +78,7 @@ export function Hero() {
         </div>
       </div>
 
-      {/* 2. Tampilan Grid untuk Desktop */}
+      {/* Desktop Grid */}
       <div className="hidden md:grid md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[550px]">
         {heroDisplayArticles.map((article, index) => (
           <HeroCard
@@ -82,4 +90,4 @@ export function Hero() {
       </div>
     </section>
   );
-}
+};

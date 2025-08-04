@@ -1,10 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 import { Article } from "@/app/types";
+import Image from "next/image"; // Impor komponen Image
 
 interface HeroCardProps {
   article: Article;
   className?: string;
 }
+
 export function HeroCard({ article, className }: HeroCardProps) {
   const categoryStyles: { [key: string]: string } = {
     Anime: "bg-secondary hover:bg-primary",
@@ -17,18 +19,19 @@ export function HeroCard({ article, className }: HeroCardProps) {
   };
 
   return (
-    <div
-      className={`${className} relative md:rounded-2xl overflow-hidden group cursor-pointer h-64 md:h-auto shadow-lg`}
+    // PERBAIKAN: Menggunakan article.slug dan path yang benar (/article/)
+    <Link
+      href={`/article/${article.slug}`}
+      className={`${className} relative md:rounded-2xl overflow-hidden group cursor-pointer h-64 md:h-auto shadow-lg block`}
     >
-      <img
+      {/* PERBAIKAN: Menggunakan komponen Image dari Next.js untuk optimasi */}
+      <Image
         src={article.imageUrl}
         alt={article.title}
+        fill
+        unoptimized
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.onerror = null;
-          target.src = `https://placehold.co/600x400/1f2937/ffffff?text=Image+Not+Found`;
-        }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
@@ -44,6 +47,6 @@ export function HeroCard({ article, className }: HeroCardProps) {
           {article.title}
         </h3>
       </div>
-    </div>
+    </Link>
   );
 }

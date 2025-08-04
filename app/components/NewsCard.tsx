@@ -15,7 +15,7 @@ interface NewsCardProps {
 export function NewsCard({ article, index }: NewsCardProps) {
   return (
     // PERBAIKAN: Seluruh kartu dibungkus oleh satu Link dengan kelas 'group'
-    <Link href={`/article/${article.id}`} className="block group h-full">
+    <Link href={`/article/${article.slug}`} className="block group h-full">
       <motion.div
         className="flex flex-col h-full"
         initial={{ opacity: 0, y: 20 }}
@@ -29,6 +29,7 @@ export function NewsCard({ article, index }: NewsCardProps) {
             height={225}
             src={article.imageUrl}
             alt={article.title}
+            unoptimized 
             className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
           />
         </div>

@@ -14,7 +14,7 @@ interface LatestNewsArticleProps {
 export function LatestNewsArticle({ article }: LatestNewsArticleProps) {
   return (
     // Seluruh kartu sekarang dibungkus oleh SATU Link dengan kelas 'group'
-    <Link href={`/article/${article.id}`} className="block group">
+    <Link href={`/article/${article.slug}`} className="block group">
       <motion.article
         // Gaya responsif tetap sama
         className="flex flex-row-reverse sm:flex-row items-center gap-4 p-4 bg-white rounded-lg shadow-sm 
@@ -34,6 +34,7 @@ export function LatestNewsArticle({ article }: LatestNewsArticleProps) {
               alt={article.title}
               width={256}
               height={170}
+              unoptimized 
               className="w-full h-full object-cover rounded-md transition-transform duration-300 group-hover:scale-105"
             />
           </div>

@@ -1,35 +1,45 @@
-import { getArticleById, trendingItems, upcomingEvents } from "@/app/data/mockData";
+import { getArticleBySlug, getTrendingItems, getUpcomingEvents } from "@/app/lib/api";
 import { ArticleDetail } from "@/app/components/article/ArticleDetail";
 import { Sidebar } from "@/app/components/Sidebar";
 import { notFound } from "next/navigation";
+import { ArticleViewTracker } from "@/app/components/ArticleViewTracker"; // Impor pemicu
 
-// ✅ Ini wajib agar route dianggap dynamic
-export const dynamic = "force-dynamic";
+type Props = {
+  params: { slug: string };
+};
 
-// ✅ Gunakan built-in type props
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function ArticlePage({ params }: PageProps) {
-  const article = getArticleById(params.slug);
+export default async function ArticlePage({ params }: Props) {
+  const article = await getArticleBySlug(params.slug);
 
   if (!article) {
     notFound();
   }
 
+  const [trendingItemsRaw, upcomingEventsRaw] = await Promise.all([
+    getTrendingItems(),
+    getUpcomingEvents(),
+  ]);
+  const trendingItems = trendingItemsRaw ?? [];
+  const upcomingEvents = upcomingEventsRaw ?? [];
+
   return (
-    <main className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <ArticleDetail article={article} />
+    <>
+      {/* Tempatkan pemicu di sini, ia akan berjalan di client */}
+      <ArticleViewTracker slug={params.slug} />
+
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <ArticleDetail article={article} />
+          </div>
+          <div className="lg:col-span-1">
+            <Sidebar
+              trendingItems={trendingItems}
+              upcomingEvents={upcomingEvents}
+            />
+          </div>
         </div>
-        <div className="lg:col-span-1">
-          <Sidebar trendingItems={trendingItems} upcomingEvents={upcomingEvents} />
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

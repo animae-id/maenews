@@ -1,31 +1,36 @@
-import { getArticlesByTag } from "@/app/data/mockData";
+import { getArticlesByTag, getTrendingItems, getUpcomingEvents } from "@/app/lib/api";
 import { LatestNewsArticle } from "@/app/components/article/LatestNewsArticle";
 import { Sidebar } from "@/app/components/Sidebar";
-import { trendingItems, upcomingEvents } from "@/app/data/mockData";
 import { Hash } from "lucide-react";
+import { Article } from "@/app/types";
 
 // Tipe untuk params yang diterima oleh halaman
-interface PageProps {
+type Props = {
   params: {
-    nameTag: string; // 'nameTag' harus sama dengan nama folder dinamis
+    nameTag: string;
   };
-}
+};
 
-// Fungsi untuk mengubah slug URL (mis: "shonen-jump") menjadi judul ("Shonen Jump")
+// Fungsi untuk mengubah slug URL menjadi judul
 function formatTagTitle(slug: string): string {
   return slug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 // Halaman ini adalah Server Component
-export default async function TagPage({ params }: PageProps) {
+export default async function TagPage({ params }: Props) {
   // Mengambil dan mendekode nama tag dari URL
   const tagSlug = decodeURIComponent(params.nameTag);
-  const tagNameForFilter = tagSlug.replace(/-/g, " ");
 
-  const articles = getArticlesByTag(tagNameForFilter);
+  // Mengambil data artikel untuk tag ini dan data untuk sidebar dari API
+  const [articles, trendingItems, upcomingEvents] = await Promise.all([
+    getArticlesByTag(tagSlug),
+    getTrendingItems(),
+    getUpcomingEvents(),
+  ]);
+
   const title = formatTagTitle(tagSlug);
 
   return (
@@ -37,13 +42,15 @@ export default async function TagPage({ params }: PageProps) {
             {/* Judul Halaman Tag */}
             <div className="flex items-center gap-2 mb-6 pb-4 border-b">
               <Hash className="w-6 h-6 text-primary" />
-              <h1 className="text-3xl font-bold text-gray-900">Tag: {title}</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Tag: {title}
+              </h1>
             </div>
 
             {/* Daftar Artikel atau Pesan Jika Kosong */}
-            {articles.length > 0 ? (
+            {(articles ?? []).length > 0 ? (
               <div className="flex flex-col gap-6">
-                {articles.map((article) => (
+                {(articles as Article[]).map((article) => (
                   <LatestNewsArticle key={article.id} article={article} />
                 ))}
               </div>
@@ -61,8 +68,8 @@ export default async function TagPage({ params }: PageProps) {
         {/* Kolom Kanan: Sidebar */}
         <div className="lg:col-span-1">
           <Sidebar
-            trendingItems={trendingItems}
-            upcomingEvents={upcomingEvents}
+            trendingItems={trendingItems ?? []}
+            upcomingEvents={upcomingEvents ?? []}
           />
         </div>
       </div>

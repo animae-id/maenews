@@ -12,6 +12,7 @@ export interface Article {
   imageUrl: string;
   tags: string[];
   featured: boolean;
+  views: number;
 }
 
 export interface TrendingItem {

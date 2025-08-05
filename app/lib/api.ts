@@ -2,7 +2,7 @@
 
 import { Article, TrendingItem, Event } from "@/app/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://golang-maenews-ezazee4135-kfehbvog.leapcell.dev/api/v1";
 
 async function fetchAPI<T>(endpoint: string): Promise<T | null> {
   try {

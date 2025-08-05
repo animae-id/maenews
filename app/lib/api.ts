@@ -38,3 +38,4 @@ export const getArticlesByTag = (tagName: string) => fetchAPI<Article[]>(`/tag/$
 export const getTrendingItems = () => fetchAPI<TrendingItem[]>('/trending');
 export const getUpcomingEvents = () => fetchAPI<Event[]>('/events/upcoming');
 export const getEventBySlug = (slug: string) => fetchAPI<Event>(`/events/${slug}`);
+export const searchArticles = (query: string) => fetchAPI<Article[]>(`/search/${query}`);

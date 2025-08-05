@@ -1,17 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Search, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
 import { navItems } from "../data/Navigation";
+import { SearchComponent } from "./SearchComponent"; 
 
-// --- Sub-komponen yang gayanya disesuaikan dengan permintaan sebelumnya ---
 
 const DesktopNav = () => (
-  // Dihilangkan 'flex-1' dan 'justify-center' karena sekarang diatur oleh parent
   <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
     {navItems.map((item, index) => (
       <motion.a
@@ -35,16 +32,8 @@ const DesktopNav = () => (
   </div>
 );
 
-const MobileNav = ({ onSearch }: { onSearch: (query: string) => void }) => {
+const MobileNav = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) onSearch(searchQuery);
-  };
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleSearch();
-  };
 
   return (
     <div className="lg:hidden">
@@ -80,23 +69,8 @@ const MobileNav = ({ onSearch }: { onSearch: (query: string) => void }) => {
                 </motion.a>
               ))}
               <div className="pt-3 mt-3 border-t border-orange-500">
-                <div className="relative flex items-center">
-                  <Input
-                    type="search"
-                    placeholder="Cari berita..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    className="flex-1 bg-white/90 border-none rounded-full pl-4 pr-12 text-sm"
-                  />
-                  <Button
-                    size="sm"
-                    onClick={handleSearch}
-                    className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-orange-500 hover:bg-orange-600 rounded-full w-8 h-8 p-0"
-                  >
-                    <Search className="w-4 h-4 text-white" />
-                  </Button>
-                </div>
+                {/* Menggunakan SearchComponent di sini */}
+                <SearchComponent />
               </div>
             </div>
           </motion.div>
@@ -108,19 +82,7 @@ const MobileNav = ({ onSearch }: { onSearch: (query: string) => void }) => {
 
 // --- Komponen Header Utama ---
 
-interface HeaderProps {
-  onSearch: (query: string) => void;
-}
-
-export function Header({ onSearch }: HeaderProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const handleSearch = () => {
-    if (searchQuery.trim()) onSearch(searchQuery);
-  };
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") handleSearch();
-  };
-
+export function Header() {
   return (
     <motion.header
       className="bg-gradient-to-r from-orange-600 to-orange-700 shadow-lg sticky top-0 z-50"
@@ -140,27 +102,12 @@ export function Header({ onSearch }: HeaderProps) {
 
         <DesktopNav />
 
-        {/* Searchbox Desktop juga menjadi item flex direct */}
-        <div className="hidden lg:flex relative w-40">
-          <Input
-            type="search"
-            placeholder="Cari berita..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            className="w-full bg-white/90 border-none rounded-full pl-4 pr-12 text-sm"
-          />
-          <Button
-            size="sm"
-            onClick={handleSearch}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-orange-500 hover:bg-orange-600 rounded-full w-8 h-8 p-0"
-          >
-            <Search className="w-4 h-4 text-white" />
-          </Button>
+        {/* Menggunakan SearchComponent di sini */}
+        <div className="hidden lg:flex w-56">
+          <SearchComponent />
         </div>
 
-        {/* Navigasi Mobile */}
-        <MobileNav onSearch={onSearch} />
+        <MobileNav />
       </div>
     </motion.header>
   );

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Calendar, MapPin, Ticket } from "lucide-react";
-import { Event } from "@/app/types"; // Impor tipe Event
+import { Event } from "@/app/types";
 import Link from "next/link";
 
 // Tipe data untuk sisa waktu
@@ -27,23 +27,27 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
   </div>
 );
 
-// PERBAIKAN: Komponen sekarang menerima 'event' sebagai prop
+// Komponen sekarang menerima array 'events'
 interface EventBannerProps {
-  event?: Event; // Event bersifat opsional
+  events?: Event[]; // Array acara, sudah diurutkan dari yang terdekat
 }
 
-export function EventBanner({ event }: EventBannerProps) {
+export function EventBanner({ events }: EventBannerProps) {
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
   const [isClient, setIsClient] = useState(false);
 
+  // Menentukan acara yang sedang aktif berdasarkan indeks
+  const activeEvent = events?.[currentEventIndex];
+
   useEffect(() => {
-    // Fungsi untuk menghitung sisa waktu, sekarang menggunakan data dari prop
+    setIsClient(true);
+
+    if (!activeEvent?.date) return;
+
     const calculateTimeLeft = (): TimeLeft | null => {
-      if (!event?.date) return null;
-
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(activeEvent.date);
       const difference = +eventDate - +new Date();
-
       if (difference > 0) {
         return {
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -55,18 +59,27 @@ export function EventBanner({ event }: EventBannerProps) {
       return null;
     };
 
-    setIsClient(true);
-    setTimeLeft(calculateTimeLeft()); // Hitung sekali saat mount
+    // Set waktu awal
+    setTimeLeft(calculateTimeLeft());
 
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      const newTimeLeft = calculateTimeLeft();
+      setTimeLeft(newTimeLeft);
+
+      // LOGIKA BARU: Jika waktu habis, pindah ke event berikutnya
+      if (newTimeLeft === null) {
+        if (events && currentEventIndex < events.length - 1) {
+          setCurrentEventIndex((prevIndex) => prevIndex + 1);
+        }
+        clearInterval(timer); // Hentikan timer untuk event yang sudah lewat
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [event]); // Jalankan ulang efek jika data event berubah
+  }, [activeEvent, events, currentEventIndex]); // Jalankan ulang efek jika acara aktif berubah
 
-  // Jika tidak ada event yang akan datang, jangan render banner
-  if (!event) {
+  // Jika tidak ada event sama sekali, jangan render banner
+  if (!activeEvent) {
     return null;
   }
 
@@ -87,22 +100,24 @@ export function EventBanner({ event }: EventBannerProps) {
         <motion.div
           className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-white/5 rounded-full"
           animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 5,
+          }}
         />
       </div>
 
-      {/* Konten Banner */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center text-white min-h-[250px] p-6">
         <div className="flex items-center gap-2">
           <Calendar className="w-5 h-5" />
-          {/* Menggunakan data dinamis */}
-          <h2 className="text-xl font-bold">{event.title}</h2>
+          <h2 className="text-xl font-bold">{activeEvent.title}</h2>
         </div>
 
         <div className="flex items-center gap-1.5 text-gray-200 text-sm mt-1 mb-2">
           <MapPin className="w-4 h-4" />
-          {/* Menggunakan data dinamis */}
-          <span>{event.location}</span>
+          <span>{activeEvent.location}</span>
         </div>
 
         {isClient && timeLeft ? (
@@ -119,7 +134,7 @@ export function EventBanner({ event }: EventBannerProps) {
         )}
 
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Link href={`/event/${event.id}`}>
+          <Link href={`/event/${activeEvent.slug}`}>
             <Button
               size="lg"
               className="cursor-pointer bg-yellow-400 hover:bg-yellow-500 rounded-full font-bold text-yellow-900 px-8 py-6 text-base"

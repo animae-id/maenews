@@ -48,7 +48,7 @@ export default async function HomePage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <EventBanner />
+          <EventBanner events={upcomingEvents ?? []} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

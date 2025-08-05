@@ -5,8 +5,9 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/app/components/ui/button";
 import { navItems } from "../data/Navigation";
-import { SearchComponent } from "./SearchComponent"; 
+import { SearchComponent } from "./SearchComponent"; // Impor komponen pencarian
 
+// --- Sub-komponen ---
 
 const DesktopNav = () => (
   <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
@@ -69,7 +70,6 @@ const MobileNav = () => {
                 </motion.a>
               ))}
               <div className="pt-3 mt-3 border-t border-orange-500">
-                {/* Menggunakan SearchComponent di sini */}
                 <SearchComponent />
               </div>
             </div>
@@ -81,7 +81,7 @@ const MobileNav = () => {
 };
 
 // --- Komponen Header Utama ---
-
+// PERBAIKAN: Header tidak lagi menerima props
 export function Header() {
   return (
     <motion.header
@@ -102,7 +102,6 @@ export function Header() {
 
         <DesktopNav />
 
-        {/* Menggunakan SearchComponent di sini */}
         <div className="hidden lg:flex w-56">
           <SearchComponent />
         </div>

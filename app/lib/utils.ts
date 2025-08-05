@@ -5,7 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Fungsi helper untuk mengubah string menjadi format URL (slug)
 export const slugify = (text: string) => {
   if (!text) return '';
   return text

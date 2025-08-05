@@ -8,16 +8,11 @@ import { Loader2, Flame } from "lucide-react";
 const ARTICLES_PER_PAGE = 5;
 
 interface ArticleFeedProps {
-  // Menerima artikel awal yang sudah di-load oleh server
   initialArticles: Article[];
-  // Menerima semua sisa artikel untuk di-load secara dinamis
   articlesToLoad: Article[];
 }
 
-export function ArticleFeed({
-  initialArticles,
-  articlesToLoad,
-}: ArticleFeedProps) {
+export function ArticleFeed({ initialArticles, articlesToLoad }: ArticleFeedProps) {
   const [page, setPage] = useState(0);
   const [loadedArticles, setLoadedArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(false);

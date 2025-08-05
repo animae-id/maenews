@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Calendar, MapPin } from "lucide-react"; // Impor MapPin
+import { Calendar, MapPin, Ticket } from "lucide-react";
+import { Event } from "@/app/types"; // Impor tipe Event
+import Link from "next/link";
 
 // Tipe data untuk sisa waktu
 interface TimeLeft {
@@ -13,7 +15,7 @@ interface TimeLeft {
   seconds: number;
 }
 
-// Komponen untuk menampilkan satu unit waktu (mis: Hari, Jam)
+// Komponen untuk menampilkan satu unit waktu
 const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
   <div className="flex flex-col items-center">
     <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
@@ -25,39 +27,48 @@ const CountdownUnit = ({ value, label }: { value: number; label: string }) => (
   </div>
 );
 
-export function EventBanner() {
+// PERBAIKAN: Komponen sekarang menerima 'event' sebagai prop
+interface EventBannerProps {
+  event?: Event; // Event bersifat opsional
+}
+
+export function EventBanner({ event }: EventBannerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
   const [isClient, setIsClient] = useState(false);
 
-  // Fungsi untuk menghitung sisa waktu
-  const calculateTimeLeft = (): TimeLeft | null => {
-    const eventDate = new Date("2025-11-15T00:00:00");
-    const difference = +eventDate - +new Date();
-
-    if (difference > 0) {
-      return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
-    }
-    return null;
-  };
-
   useEffect(() => {
+    // Fungsi untuk menghitung sisa waktu, sekarang menggunakan data dari prop
+    const calculateTimeLeft = (): TimeLeft | null => {
+      if (!event?.date) return null;
+
+      const eventDate = new Date(event.date);
+      const difference = +eventDate - +new Date();
+
+      if (difference > 0) {
+        return {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        };
+      }
+      return null;
+    };
+
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient) return;
+    setTimeLeft(calculateTimeLeft()); // Hitung sekali saat mount
 
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isClient]);
+  }, [event]); // Jalankan ulang efek jika data event berubah
+
+  // Jika tidak ada event yang akan datang, jangan render banner
+  if (!event) {
+    return null;
+  }
 
   return (
     <motion.section
@@ -66,7 +77,7 @@ export function EventBanner() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Elemen Dekoratif di Latar Belakang */}
+      {/* ... (Elemen dekoratif tetap sama) ... */}
       <div className="absolute inset-0 overflow-hidden rounded-xl">
         <motion.div
           className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-white/5 rounded-full"
@@ -76,12 +87,7 @@ export function EventBanner() {
         <motion.div
           className="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-white/5 rounded-full"
           animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 5,
-          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 5 }}
         />
       </div>
 
@@ -89,13 +95,14 @@ export function EventBanner() {
       <div className="relative z-10 flex flex-col items-center justify-center text-center text-white min-h-[250px] p-6">
         <div className="flex items-center gap-2">
           <Calendar className="w-5 h-5" />
-          <h2 className="text-xl font-bold">HATSUNE MIKU EXPO 2025</h2>
+          {/* Menggunakan data dinamis */}
+          <h2 className="text-xl font-bold">{event.title}</h2>
         </div>
 
-        {/* PERBAIKAN: Menambahkan alamat di sini */}
         <div className="flex items-center gap-1.5 text-gray-200 text-sm mt-1 mb-2">
           <MapPin className="w-4 h-4" />
-          <span>Jakarta Convention Center</span>
+          {/* Menggunakan data dinamis */}
+          <span>{event.location}</span>
         </div>
 
         {isClient && timeLeft ? (
@@ -112,13 +119,15 @@ export function EventBanner() {
         )}
 
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button
-            onClick={() => (window.location.href = "#")}
-            size="lg"
-            className="cursor-pointer bg-yellow-400 hover:bg-yellow-500 rounded-full font-bold text-yellow-900 px-8 py-6 text-base"
-          >
-            Lihat Detail Postingan
-          </Button>
+          <Link href={`/event/${event.id}`}>
+            <Button
+              size="lg"
+              className="cursor-pointer bg-yellow-400 hover:bg-yellow-500 rounded-full font-bold text-yellow-900 px-8 py-6 text-base"
+            >
+              <Ticket className="w-5 h-5 mr-2" />
+              Lihat Detail Event
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </motion.section>

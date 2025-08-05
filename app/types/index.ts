@@ -18,6 +18,7 @@ export interface TrendingItem {
   id: string;
   title: string;
   description: string;
+  slug: string;
   category: string;
   publishedAt: string;
 }
@@ -25,6 +26,7 @@ export interface TrendingItem {
 export interface Event {
   id: string;
   title: string;
+  slug: string;
   location: string;
   date: string;
   category: string;

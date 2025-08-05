@@ -1,33 +1,36 @@
-import { getArticlesByCategory } from "@/app/data/mockData";
+import { getArticlesByCategory, getTrendingItems, getUpcomingEvents } from "@/app/lib/api";
 import { LatestNewsArticle } from "@/app/components/article/LatestNewsArticle";
 import { Sidebar } from "@/app/components/Sidebar";
-import { trendingItems, upcomingEvents } from "@/app/data/mockData";
 import { Tag } from "lucide-react";
+import { Article } from "@/app/types";
 
 // Tipe untuk params yang diterima oleh halaman
-interface PageProps {
+type Props = {
   params: {
-    categoryName: string; // 'categoryName' harus sama dengan nama folder dinamis
+    categoryName: string;
   };
-}
+};
 
 // Fungsi untuk mengubah slug URL (mis: "content-creator") menjadi judul ("Content Creator")
 function formatCategoryTitle(slug: string): string {
   return slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 // Halaman ini adalah Server Component
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({ params }: Props) {
   // Mengambil dan mendekode nama kategori dari URL
   const categorySlug = decodeURIComponent(params.categoryName);
-  
-  // PERBAIKAN: Mengubah slug URL (mis: "content-creator") menjadi format yang cocok untuk filter ("content creator")
-  const categoryNameForFilter = categorySlug.replace(/-/g, ' ');
 
-  const articles = getArticlesByCategory(categoryNameForFilter);
+  // Mengambil data artikel untuk kategori ini dan data untuk sidebar dari API
+  const [articles, trendingItems, upcomingEvents] = await Promise.all([
+    getArticlesByCategory(categorySlug),
+    getTrendingItems(),
+    getUpcomingEvents(),
+  ]);
+
   const title = formatCategoryTitle(categorySlug);
 
   return (
@@ -45,9 +48,9 @@ export default async function CategoryPage({ params }: PageProps) {
             </div>
 
             {/* Daftar Artikel atau Pesan Jika Kosong */}
-            {articles.length > 0 ? (
+            {(articles ?? []).length > 0 ? (
               <div className="flex flex-col gap-6">
-                {articles.map((article) => (
+                {(articles as Article[]).map((article) => (
                   <LatestNewsArticle key={article.id} article={article} />
                 ))}
               </div>
@@ -65,8 +68,8 @@ export default async function CategoryPage({ params }: PageProps) {
         {/* Kolom Kanan: Sidebar */}
         <div className="lg:col-span-1">
           <Sidebar
-            trendingItems={trendingItems}
-            upcomingEvents={upcomingEvents}
+            trendingItems={trendingItems ?? []}
+            upcomingEvents={upcomingEvents ?? []}
           />
         </div>
       </div>

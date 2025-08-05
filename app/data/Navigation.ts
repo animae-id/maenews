@@ -7,8 +7,8 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { label: "Anime", href: "/category/anime" },
   { label: "Creator", href: "/category/content-creator" },
-  { label: "Event", href: "/category/event" },
+  { label: "Event", href: "/event" },
   { label: "Gaming", href: "/category/gaming" },
   { label: "Cosplay", href: "/category/cosplay" },
-  { label: "Gallery", href: "/gallery" }, // Gallery bisa menjadi halaman terpisah
+  { label: "Gallery", href: "/gallery" },
 ];

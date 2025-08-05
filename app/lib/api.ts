@@ -37,3 +37,4 @@ export const getArticlesByCategory = (categoryName: string) => fetchAPI<Article[
 export const getArticlesByTag = (tagName: string) => fetchAPI<Article[]>(`/tag/${tagName}`);
 export const getTrendingItems = () => fetchAPI<TrendingItem[]>('/trending');
 export const getUpcomingEvents = () => fetchAPI<Event[]>('/events/upcoming');
+export const getEventBySlug = (slug: string) => fetchAPI<Event>(`/events/${slug}`);

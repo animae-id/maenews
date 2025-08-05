@@ -28,9 +28,12 @@ export function Sidebar({ trendingItems, upcomingEvents }: SidebarProps) {
         </div>
 
         <div className="space-y-4">
-          {/* PERBAIKAN: Menggunakan .slice(0, 5) untuk membatasi data */}
           {trendingItems.slice(0, 5).map((item, index) => (
-            <Link href="#" key={item.id} className="block group">
+            <Link
+              href={`/article/${item.slug}`}
+              key={item.id}
+              className="block group"
+            >
               <motion.div
                 className="flex gap-4 p-2 rounded-xl hover:bg-orange-50 transition-colors"
                 initial={{ opacity: 0, y: 15 }}
@@ -78,7 +81,12 @@ export function Sidebar({ trendingItems, upcomingEvents }: SidebarProps) {
 
         <div className="space-y-4">
           {upcomingEvents.slice(0, 5).map((event, index) => (
-            <Link href="#" key={event.id} className="block group">
+            // PERBAIKAN: href sekarang menggunakan event.slug
+            <Link
+              href={`/event/${event.slug}`}
+              key={event.id}
+              className="block group"
+            >
               <motion.div
                 className="flex gap-4 p-2 rounded-xl hover:bg-orange-50 transition-colors"
                 initial={{ opacity: 0, y: 15 }}
